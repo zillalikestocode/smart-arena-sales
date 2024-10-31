@@ -45,7 +45,7 @@ export const Navbar = () => {
         </ul> */}
       </NavbarContent>
       <NavbarContent className="basis-1/5 sm:basis-full" justify="end">
-        <Link href="/bar-codes">Barcodes</Link>
+        <Link href="/bar-codes">QR Codes</Link>
         <ThemeSwitch />
         <Link href="/create">
           <Button

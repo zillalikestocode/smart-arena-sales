@@ -10,7 +10,7 @@ export default function MainComponent({ branches }: { branches: Branch[] }) {
       <h4 className="font-semibold text-2xl tracking-[-0.04em]">Branches</h4>
       <div className="grid md:grid-cols-5 mt-2.5">
         {branches.map((item, i) => (
-          <Card>
+          <Card key={i}>
             <CardBody>
               <div className="flex items-center">
                 <h4 className="font-semibold tracking-[-0.04em] text-lg">

@@ -36,7 +36,7 @@ export default function BarcodeComponent({
       <div className="grid grid-cols-4 gap-5 mt-2.5">
         {products
           .filter((item) =>
-            item.name.toLowerCase().includes(search.toLowerCase())
+            item.name.toLowerCase().includes(search.toLowerCase()),
           )
           .map((item, i) => (
             <BarcodeGroup product={item} key={item.id} />
@@ -77,7 +77,7 @@ const VariantBarCode = ({ product }: { product: Product }) => {
             Object.assign(
               { name: product.name },
               { id: product.id },
-              { options: { ...currentCombination } }
+              { options: { ...currentCombination } },
             ),
           ];
         }
@@ -95,8 +95,8 @@ const VariantBarCode = ({ product }: { product: Product }) => {
               index + 1,
               Object.assign({}, currentCombination, {
                 [key]: optionValue.value,
-              })
-            )
+              }),
+            ),
           );
         });
 
@@ -114,14 +114,14 @@ const VariantBarCode = ({ product }: { product: Product }) => {
     setOptions(combinationsArray);
   });
   return options.map((item, i) => (
-    <div>
+    <div key={i}>
       <div>
         <h4 className="text-sm font-medium text-foreground-700">
           {product.name}
         </h4>
         <h4 className="text-xs uppercase text-foreground-500">
           {Object.keys(item.options).map(
-            (value) => item.options[value as keyof object] + " "
+            (value) => item.options[value as keyof object] + " ",
           )}
         </h4>
         <QRCodeCanvas
@@ -134,22 +134,6 @@ const VariantBarCode = ({ product }: { product: Product }) => {
               .join(",")
           }
         />
-        {/* <Barcode
-          margin={3}
-          value={
-            product.id.replace(/\D/g, "") +
-            "-" +
-            Object.keys(item.options)
-              .map((value) => item.options[value as keyof object])
-              .join(",")
-          }
-          background="white"
-          renderer="img"
-          displayValue={false}
-          // width={1}
-          height={70}
-          fontSize={12}
-        /> */}
       </div>
     </div>
   ));

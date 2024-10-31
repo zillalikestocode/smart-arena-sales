@@ -41,7 +41,7 @@ export default async function RootLayout({
         style={GeistSans.style}
         className={clsx("min-h-screen bg-background font-sans antialiased")}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "lights" }}>
+        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           <div className="relative flex flex-col h-screen">
             {session && <Navbar />}
             <main className="container mx-auto max-w-7xl px-6 flex-grow">

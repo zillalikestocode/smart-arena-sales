@@ -113,28 +113,33 @@ const VariantBarCode = ({ product }: { product: Product }) => {
     console.log(combinationsArray);
     setOptions(combinationsArray);
   });
-  return options.map((item, i) => (
-    <div key={i}>
-      <div>
-        <h4 className="text-sm font-medium text-foreground-700">
-          {product.name}
-        </h4>
-        <h4 className="text-xs uppercase text-foreground-500">
-          {Object.keys(item.options).map(
-            (value) => item.options[value as keyof object] + " ",
-          )}
-        </h4>
-        <QRCodeCanvas
-          className="!w-10 !h-10"
-          value={
-            product.id +
-            "-" +
-            Object.keys(item.options)
-              .map((value) => item.options[value as keyof object])
-              .join(",")
-          }
-        />
-      </div>
-    </div>
-  ));
+  return (
+    <>
+      {" "}
+      {options.map((item, i) => (
+        <div key={i}>
+          <div>
+            <h4 className="text-sm font-medium text-foreground-700">
+              {product.name}
+            </h4>
+            <h4 className="text-xs uppercase text-foreground-500">
+              {Object.keys(item.options).map(
+                (value) => item.options[value as keyof object] + " ",
+              )}
+            </h4>
+            <QRCodeCanvas
+              className="!w-10 !h-10"
+              value={
+                product.id +
+                "-" +
+                Object.keys(item.options)
+                  .map((value) => item.options[value as keyof object])
+                  .join(",")
+              }
+            />
+          </div>
+        </div>
+      ))}
+    </>
+  );
 };

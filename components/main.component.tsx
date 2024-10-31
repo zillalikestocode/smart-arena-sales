@@ -3,6 +3,7 @@
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { Branch } from "@prisma/client";
 import { ArrowUp } from "iconsax-react";
+import Link from "next/link";
 
 export default function MainComponent({ branches }: { branches: Branch[] }) {
   return (
@@ -16,9 +17,9 @@ export default function MainComponent({ branches }: { branches: Branch[] }) {
                 <h4 className="font-semibold tracking-[-0.04em] text-lg">
                   {item.name}
                 </h4>
-                <button className="ml-auto">
+                <Link href={`/branch/${item.id}`} className="ml-auto">
                   <ArrowUp size={16} className="rotate-45 text-primary" />
-                </button>
+                </Link>
               </div>
               <p className="text-sm mt-1.5 text-foreground-500">
                 {item.address}

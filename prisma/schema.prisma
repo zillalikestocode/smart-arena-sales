@@ -349,13 +349,16 @@ model Inventory {
 
 model Invoice {
   id           String         @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt    DateTime       @db.Date
+  createdAt    DateTime       @default(now()) @db.Date
   customerName String
   email        String
   items        InvoiceItems[]
   phoneNumber  String
   status       InvoiceStatus
   totalPrice   BigInt
+  branchId     String?        @db.ObjectId
+
+  branch Branch? @relation(fields: [branchId], references: [id])
 }
 
 model MobileAd {
@@ -474,6 +477,8 @@ model Branch {
   phone    String?
 
   Stock Stock[]
+
+  Invoice Invoice[]
 }
 
 model Stock {

@@ -9,7 +9,7 @@ export default function MainComponent({ branches }: { branches: Branch[] }) {
   return (
     <div>
       <h4 className="font-semibold text-2xl tracking-[-0.04em]">Branches</h4>
-      <div className="grid md:grid-cols-5 mt-2.5">
+      <div className="grid md:grid-cols-5 gap-2.5 mt-2.5">
         {branches.map((item, i) => (
           <Card key={i}>
             <CardBody>

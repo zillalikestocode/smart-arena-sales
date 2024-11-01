@@ -8,9 +8,10 @@ import {
 } from "@nextui-org/react";
 import { Product } from "@prisma/client";
 import { Barcode as Bcode, SearchNormal } from "iconsax-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Barcode from "react-barcode";
 import { QRCodeCanvas } from "qrcode.react";
+import { exportAsImage } from "@/utils/generateImages";
 
 export default function BarcodeComponent({
   products,
@@ -18,12 +19,20 @@ export default function BarcodeComponent({
   products: Product[];
 }) {
   const [search, setSearch] = useState("");
+  const exportRef = useRef(null);
 
   return (
     <div className="flex flex-col">
       <h4 className="font-semibold text-2xl tracking-[-0.04em]">
         Product Barcodes
       </h4>
+      <Button
+        className="w-fit"
+        color="primary"
+        onClick={() => exportAsImage(exportRef.current)}
+      >
+        Download as Image
+      </Button>
       <Input
         className="w-96 mt-2.5"
         label="Search"
@@ -33,10 +42,10 @@ export default function BarcodeComponent({
         value={search}
         onValueChange={setSearch}
       />
-      <div className="grid grid-cols-4 gap-5 mt-2.5">
+      <div ref={exportRef} className="grid grid-cols-4 gap-5 mt-2.5">
         {products
           .filter((item) =>
-            item.name.toLowerCase().includes(search.toLowerCase()),
+            item.name.toLowerCase().includes(search.toLowerCase())
           )
           .map((item, i) => (
             <BarcodeGroup product={item} key={item.id} />
@@ -51,11 +60,10 @@ const BarcodeGroup = ({ product }: { product: Product }) => {
     <VariantBarCode product={product} />
   ) : (
     <div>
-      <h4 className="text-sm font-medium text-foreground-700">
+      <h4 className="text-sm mb-2.5 font-medium text-foreground-700">
         {product.name}
       </h4>
       <QRCodeCanvas className="!w-10 !h-10" value={product.id} />
-      {product.id}
     </div>
   );
 };
@@ -77,7 +85,7 @@ const VariantBarCode = ({ product }: { product: Product }) => {
             Object.assign(
               { name: product.name },
               { id: product.id },
-              { options: { ...currentCombination } },
+              { options: { ...currentCombination } }
             ),
           ];
         }
@@ -95,8 +103,8 @@ const VariantBarCode = ({ product }: { product: Product }) => {
               index + 1,
               Object.assign({}, currentCombination, {
                 [key]: optionValue.value,
-              }),
-            ),
+              })
+            )
           );
         });
 
@@ -115,16 +123,15 @@ const VariantBarCode = ({ product }: { product: Product }) => {
   });
   return (
     <>
-      {" "}
       {options.map((item, i) => (
         <div key={i}>
           <div>
             <h4 className="text-sm font-medium text-foreground-700">
               {product.name}
             </h4>
-            <h4 className="text-xs uppercase text-foreground-500">
+            <h4 className="text-xs mb-2.5 uppercase text-foreground-500">
               {Object.keys(item.options).map(
-                (value) => item.options[value as keyof object] + " ",
+                (value) => item.options[value as keyof object] + " "
               )}
             </h4>
             <QRCodeCanvas

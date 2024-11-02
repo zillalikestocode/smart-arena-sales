@@ -9,6 +9,7 @@ export default function StockItem({ item }: { item: StockWithProduct }) {
       <CardBody>
         <div className="flex items-center gap-2.5">
           <img
+            alt=""
             src={`https://res.cloudinary.com/deipg69lh/image/upload/${item.product.images[0]}`}
             className="w-10 h-10 rounded-md object-cover"
           />
@@ -20,6 +21,7 @@ export default function StockItem({ item }: { item: StockWithProduct }) {
               {item.variant && (
                 <h4 className="text-xs text-foreground-500">
                   {Object.keys(item.variant)
+                    //@ts-ignore
                     .map((value: any) => item.variant[value])
                     .join(", ")}
                 </h4>

@@ -1,3 +1,4 @@
+"use client";
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -16,11 +17,18 @@ import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Add, Logout } from "iconsax-react";
 import { logout } from "@/app/actions";
+import { useState } from "react";
 
 export const Navbar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   return (
-    <NextUINavbar maxWidth="xl" position="sticky">
+    <NextUINavbar
+      onMenuOpenChange={setIsMenuOpen}
+      maxWidth="xl"
+      position="sticky"
+    >
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
+        <NavbarMenuToggle />
         <NavbarBrand as="li" className="gap-3 max-w-fit">
           <NextLink className="flex justify-start items-center gap-1" href="/">
             {/* <Logo /> */}
@@ -44,7 +52,14 @@ export const Navbar = () => {
           ))}
         </ul> */}
       </NavbarContent>
-      <NavbarContent className="basis-1/5 sm:basis-full" justify="end">
+      <NavbarContent className="sm:hidden" justify="end">
+        <Link href="/bar-codes">QR Codes</Link>
+        <ThemeSwitch />
+      </NavbarContent>
+      <NavbarContent
+        className="basis-1/5 sm:basis-full hidden sm:flex"
+        justify="end"
+      >
         <Link href="/bar-codes">QR Codes</Link>
         <ThemeSwitch />
         <Link href="/create">
@@ -69,6 +84,32 @@ export const Navbar = () => {
           </Button>
         </form>
       </NavbarContent>
+      <NavbarMenu className="gap-5">
+        <NavbarMenuItem>
+          <Link href="/receiver">Receivers</Link>
+        </NavbarMenuItem>
+        <Link href="/create">
+          <Button
+            endContent={<Add size={16} />}
+            radius="full"
+            className="text-sm font-medium"
+            color="primary"
+          >
+            Create Branch
+          </Button>
+        </Link>
+        <form action={logout}>
+          <Button
+            type="submit"
+            endContent={<Logout size={16} />}
+            radius="full"
+            className="text-sm font-medium"
+            color="danger"
+          >
+            Log out
+          </Button>
+        </form>
+      </NavbarMenu>
     </NextUINavbar>
   );
 };

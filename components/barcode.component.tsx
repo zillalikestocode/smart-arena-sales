@@ -27,14 +27,14 @@ export default function BarcodeComponent({
         Product Barcodes
       </h4>
       <Button
-        className="w-fit"
+        className="w-fit my-2.5"
         color="primary"
         onClick={() => exportAsImage(exportRef.current)}
       >
         Download as Image
       </Button>
       <Input
-        className="w-96 mt-2.5"
+        className="md:w-96 w-full my-2.5"
         label="Search"
         placeholder="Filter Items"
         size="sm"
@@ -42,10 +42,13 @@ export default function BarcodeComponent({
         value={search}
         onValueChange={setSearch}
       />
-      <div ref={exportRef} className="grid grid-cols-4 gap-5 mt-2.5">
+      <div
+        ref={exportRef}
+        className="grid grid-cols-4 md:grid-cols-4 gap-5 mt-2.5"
+      >
         {products
           .filter((item) =>
-            item.name.toLowerCase().includes(search.toLowerCase())
+            item.name.toLowerCase().includes(search.toLowerCase()),
           )
           .map((item, i) => (
             <BarcodeGroup product={item} key={item.id} />
@@ -63,7 +66,10 @@ const BarcodeGroup = ({ product }: { product: Product }) => {
       <h4 className="text-sm mb-2.5 font-medium text-foreground-700">
         {product.name}
       </h4>
-      <QRCodeCanvas className="!w-10 !h-10" value={product.id} />
+      <QRCodeCanvas
+        className="md:!w-10 !w-16 !h-16 md:!h-10"
+        value={product.id}
+      />
     </div>
   );
 };
@@ -85,7 +91,7 @@ const VariantBarCode = ({ product }: { product: Product }) => {
             Object.assign(
               { name: product.name },
               { id: product.id },
-              { options: { ...currentCombination } }
+              { options: { ...currentCombination } },
             ),
           ];
         }
@@ -103,8 +109,8 @@ const VariantBarCode = ({ product }: { product: Product }) => {
               index + 1,
               Object.assign({}, currentCombination, {
                 [key]: optionValue.value,
-              })
-            )
+              }),
+            ),
           );
         });
 
@@ -118,9 +124,8 @@ const VariantBarCode = ({ product }: { product: Product }) => {
     const combinationsArray = combineOptions(product);
 
     // Output the result
-    console.log(combinationsArray);
     setOptions(combinationsArray);
-  });
+  }, []);
   return (
     <>
       {options.map((item, i) => (
@@ -131,11 +136,11 @@ const VariantBarCode = ({ product }: { product: Product }) => {
             </h4>
             <h4 className="text-xs mb-2.5 uppercase text-foreground-500">
               {Object.keys(item.options).map(
-                (value) => item.options[value as keyof object] + " "
+                (value) => item.options[value as keyof object] + " ",
               )}
             </h4>
             <QRCodeCanvas
-              className="!w-10 !h-10"
+              className="md:!w-10 !w-16 !h-16 md:!h-10"
               value={
                 product.id +
                 "-" +

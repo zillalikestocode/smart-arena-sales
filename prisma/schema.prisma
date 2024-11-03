@@ -409,7 +409,8 @@ model Product {
   stock       Boolean
   warranty    String
 
-  Stock Stock[]
+  Stock  Stock[]
+  Sample Sample[]
 }
 
 model Purchases {
@@ -476,7 +477,8 @@ model Branch {
   address  String?
   phone    String?
 
-  Stock Stock[]
+  Stock  Stock[]
+  Sample Sample[]
 
   Invoice Invoice[]
 }
@@ -490,4 +492,26 @@ model Stock {
 
   product Product @relation(fields: [productId], references: [id])
   branch  Branch  @relation(fields: [branchId], references: [id])
+}
+
+model Sample {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  branchId   String @db.ObjectId
+  productId  String @db.ObjectId
+  receiverId String @db.ObjectId
+  variant    Json?
+  quantity   Int
+
+  product  Product  @relation(fields: [productId], references: [id])
+  branch   Branch   @relation(fields: [branchId], references: [id])
+  receiver Receiver @relation(fields: [receiverId], references: [id])
+}
+
+model Receiver {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  fullName    String
+  phoneNumber String
+  address     String?
+
+  Sample Sample[]
 }

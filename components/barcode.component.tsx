@@ -4,6 +4,7 @@ import {
   Autocomplete,
   AutocompleteItem,
   Button,
+  Checkbox,
   Input,
 } from "@nextui-org/react";
 import { Product } from "@prisma/client";
@@ -19,6 +20,7 @@ export default function BarcodeComponent({
   products: Product[];
 }) {
   const [search, setSearch] = useState("");
+  const [showTitle, setShowTitle] = useState(true);
   const exportRef = useRef(null);
 
   return (
@@ -33,6 +35,9 @@ export default function BarcodeComponent({
       >
         Download as Image
       </Button>
+      <Checkbox isSelected={showTitle} onValueChange={setShowTitle}>
+        Show Title
+      </Checkbox>
       <Input
         className="md:w-96 w-full my-2.5"
         label="Search"
@@ -44,28 +49,36 @@ export default function BarcodeComponent({
       />
       <div
         ref={exportRef}
-        className="grid grid-cols-4 md:grid-cols-4 gap-5 mt-2.5"
+        className={`grid ${showTitle ? "grid-cols-4" : "grid-cols-5"} gap-5 mt-2.5`}
       >
         {products
           .filter((item) =>
             item.name.toLowerCase().includes(search.toLowerCase()),
           )
           .map((item, i) => (
-            <BarcodeGroup product={item} key={item.id} />
+            <BarcodeGroup showTitle={showTitle} product={item} key={item.id} />
           ))}
       </div>
     </div>
   );
 }
 
-const BarcodeGroup = ({ product }: { product: Product }) => {
+const BarcodeGroup = ({
+  product,
+  showTitle,
+}: {
+  product: Product;
+  showTitle: boolean;
+}) => {
   return Object.keys(product.options as Array<any>).length !== 0 ? (
-    <VariantBarCode product={product} />
+    <VariantBarCode showTitle={showTitle} product={product} />
   ) : (
     <div>
-      <h4 className="text-sm mb-2.5 font-medium text-foreground-700">
-        {product.name}
-      </h4>
+      {showTitle && (
+        <h4 className="text-sm mb-2.5 font-medium text-foreground-700">
+          {product.name}
+        </h4>
+      )}
       <QRCodeCanvas
         className="md:!w-10 !w-16 !h-16 md:!h-10"
         value={product.id}
@@ -74,7 +87,13 @@ const BarcodeGroup = ({ product }: { product: Product }) => {
   );
 };
 
-const VariantBarCode = ({ product }: { product: Product }) => {
+const VariantBarCode = ({
+  product,
+  showTitle,
+}: {
+  product: Product;
+  showTitle: boolean;
+}) => {
   const [options, setOptions] = useState<
     { id: string; name: string; options: any[] }[]
   >([]);
@@ -131,14 +150,18 @@ const VariantBarCode = ({ product }: { product: Product }) => {
       {options.map((item, i) => (
         <div key={i}>
           <div>
-            <h4 className="text-sm font-medium text-foreground-700">
-              {product.name}
-            </h4>
-            <h4 className="text-xs mb-2.5 uppercase text-foreground-500">
-              {Object.keys(item.options).map(
-                (value) => item.options[value as keyof object] + " ",
-              )}
-            </h4>
+            {showTitle && (
+              <>
+                <h4 className="text-sm font-medium text-foreground-700">
+                  {product.name}
+                </h4>
+                <h4 className="text-xs mb-2.5 uppercase text-foreground-500">
+                  {Object.keys(item.options).map(
+                    (value) => item.options[value as keyof object] + " ",
+                  )}
+                </h4>
+              </>
+            )}
             <QRCodeCanvas
               className="md:!w-10 !w-16 !h-16 md:!h-10"
               value={
